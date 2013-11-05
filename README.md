@@ -1,4 +1,4 @@
 android-arduino-remote
 ======================
 
-Control your WiFi-enabled Arduino with these app by using a WiFi p2p Connection
+Control your WiFi-enabled Arduino with these app over a WiFi p2p connection.
