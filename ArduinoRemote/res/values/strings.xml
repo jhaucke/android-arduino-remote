@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ArduinoRemote</string>
+    <string name="menu_connection">Connection</string>
+    <string name="menu_editmode">Edit-Mode</string>
+    <string name="title_section1">Car</string>
+    <string name="title_section2">Custom</string>
+
+</resources>
