@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.jere0710.arduinoremote.wifi;
+package de.jere0710.arduinoremote.network;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

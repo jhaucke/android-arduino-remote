@@ -8,17 +8,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.jere0710.arduinoremote.R;
 import de.jere0710.arduinoremote.interfaces.Constants;
 import de.jere0710.arduinoremote.listeners.DragListener;
 import de.jere0710.arduinoremote.listeners.TouchListener;
+import de.jere0710.arduinoremote.network.UdpTask;
 
 public class CustomRemoteControlFragment extends Fragment implements Constants,
 		OnCheckedChangeListener {
@@ -47,18 +46,40 @@ public class CustomRemoteControlFragment extends Fragment implements Constants,
 		sharedPref = getActivity().getSharedPreferences(
 				SHAREDPREF_CUSTOMREMOTECONTROLFRAGMENT, Context.MODE_PRIVATE);
 
-		Button dummyButton = (Button) mContentView
+		ToggleButton dummyButton = (ToggleButton) mContentView
 				.findViewById(R.id.section_button);
 		dummyButton.setTranslationX(sharedPref.getFloat(VARIABLE_BUTTONX, 0));
 		dummyButton.setTranslationY(sharedPref.getFloat(VARIABLE_BUTTONY, 0));
-		dummyButton.setText("Dummy Button");
-		dummyButton.setOnClickListener(new OnClickListener() {
+//		dummyButton.setText("Dummy Button");
+		// dummyButton.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // Toast.makeText(getActivity(), "Button clicked",
+		// // Toast.LENGTH_SHORT).show();
+		// new
+		// RequestTask().execute("http://192.168.240.1/arduino/digital/13/1");
+		//
+		// }
+		// });
+
+		dummyButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Button clicked",
-						Toast.LENGTH_SHORT).show();
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
 
+				UdpTask requestTask = new UdpTask();
+
+				if (isChecked) {
+
+					requestTask
+							.execute("1");
+				} else {
+
+					requestTask
+							.execute("0");
+				}
 			}
 		});
 

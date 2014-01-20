@@ -28,7 +28,7 @@ import de.jere0710.arduinoremote.fragments.ConnectionDialogFragment;
 import de.jere0710.arduinoremote.fragments.CustomRemoteControlFragment;
 import de.jere0710.arduinoremote.fragments.WiFiOffDialogFragment;
 import de.jere0710.arduinoremote.interfaces.Constants;
-import de.jere0710.arduinoremote.wifi.WiFiBroadcastReceiver;
+import de.jere0710.arduinoremote.network.WiFiBroadcastReceiver;
 
 public class RemoteControlActivity extends Activity implements Constants,
 		ActionBar.OnNavigationListener, OnCheckedChangeListener,
