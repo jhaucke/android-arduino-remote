@@ -7,19 +7,25 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import de.jere0710.arduinoremote.R;
 import de.jere0710.arduinoremote.interfaces.Constants;
+import de.jere0710.arduinoremote.network.UdpTask;
 
 public class CarRemoteControlFragment extends Fragment implements Constants,
-		SensorEventListener {
+		SensorEventListener, OnSeekBarChangeListener {
 
 	private View mContentView;
 	private SensorManager mSensorManager;
 	private Sensor mRotationVectorSensor;
+	private SeekBar seekBarGas;
+	private SeekBar seekBarSteering;
+	private PowerManager.WakeLock wl;
 	private final float[] mRotationMatrix = new float[16];
 	private final float[] orientationArray = new float[3];
 
@@ -44,6 +50,17 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 				Context.SENSOR_SERVICE);
 		mRotationVectorSensor = mSensorManager
 				.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+		seekBarGas = ((SeekBar) mContentView.findViewById(R.id.seekBarGas));
+		seekBarSteering = ((SeekBar) mContentView
+				.findViewById(R.id.seekBarSteering));
+		seekBarGas.setProgress(60);
+		seekBarGas.setOnSeekBarChangeListener(this);
+		seekBarSteering.setOnSeekBarChangeListener(this);
+
+		PowerManager pm = (PowerManager) getActivity().getSystemService(
+				Context.POWER_SERVICE);
+		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+				"CarRemoteControlFragment");
 
 		return mContentView;
 	}
@@ -54,6 +71,10 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 		// enable our sensor when the activity is resumed, ask for
 		// 10 ms updates.
 		mSensorManager.registerListener(this, mRotationVectorSensor, 10000);
+
+		// acquire the WAKE_LOCK
+		wl.acquire();
+
 		super.onResume();
 	}
 
@@ -62,6 +83,10 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 		// make sure to turn our sensor off when the activity is paused
 		mSensorManager.unregisterListener(this);
+
+		// release the WAKE_LOCK
+		wl.release();
+
 		super.onPause();
 	}
 
@@ -90,12 +115,47 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 			SeekBar seekBarSteering = ((SeekBar) mContentView
 					.findViewById(R.id.seekBarSteering));
 			seekBarSteering
-					.setProgress(-Math.round(orientationArray[1] * 100) + 150);
+					.setProgress(-Math.round(orientationArray[1] * 100) + 90);
 
 			// SeekBar seekBarGas = ((SeekBar) mContentView
 			// .findViewById(R.id.seekBarGas));
 			// seekBarGas.setProgress(Math.round(orientationArray[2] * 100) +
 			// 100);
+		}
+	}
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress,
+			boolean fromUser) {
+
+		UdpTask requestTask = new UdpTask();
+
+		if (seekBar.getId() == R.id.seekBarGas) {
+
+			// Log.e("GAS", "gas:" + progress);
+			requestTask.execute("g:" + progress);
+		}
+
+		if (seekBar.getId() == R.id.seekBarSteering) {
+
+			// Log.e("STEERING", "steering:" + progress);
+			requestTask.execute("s:" + progress);
+		}
+
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+
+		// nothing to do
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+
+		if (seekBar.getId() == R.id.seekBarGas) {
+
+			seekBarGas.setProgress(60);
 		}
 	}
 }

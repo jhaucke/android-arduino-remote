@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:max="300" />
+        android:max="180" />
 
     <SeekBar
         android:id="@+id/seekBarGas"
@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:paddingBottom="50dip"
         android:paddingTop="140dip"
-        android:max="200"
+        android:max="180"
         android:rotation="-90.0" />
 
 </RelativeLayout>
