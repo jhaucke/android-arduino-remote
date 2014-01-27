@@ -29,16 +29,6 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	private final float[] mRotationMatrix = new float[16];
 	private final float[] orientationArray = new float[3];
 
-	// public static Fragment newInstance(final int bla) {
-	// final Bundle bunde = new Bundle();
-	// bunde.putInt("", bla);
-	//
-	// final Fragment fragment = new RemoteControlFragment();
-	// fragment.setArguments(bunde);
-	//
-	// return fragment;
-	// }
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,9 +43,10 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 		seekBarGas = ((SeekBar) mContentView.findViewById(R.id.seekBarGas));
 		seekBarSteering = ((SeekBar) mContentView
 				.findViewById(R.id.seekBarSteering));
-		seekBarGas.setProgress(60);
 		seekBarGas.setOnSeekBarChangeListener(this);
+		seekBarSteering.setEnabled(false);
 		seekBarSteering.setOnSeekBarChangeListener(this);
+		centeringControl();
 
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
@@ -92,8 +83,8 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
 
+		// nothing to do
 	}
 
 	@Override
@@ -157,5 +148,10 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 			seekBarGas.setProgress(60);
 		}
+	}
+
+	private void centeringControl() {
+		seekBarSteering.setProgress(80);
+		seekBarGas.setProgress(60);
 	}
 }

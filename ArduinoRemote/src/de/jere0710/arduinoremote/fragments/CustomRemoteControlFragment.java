@@ -26,16 +26,6 @@ public class CustomRemoteControlFragment extends Fragment implements Constants,
 	private Boolean savedMenuToggleButtonEditMode;
 	private SharedPreferences sharedPref;
 
-	// public static Fragment newInstance(final int bla) {
-	// final Bundle bunde = new Bundle();
-	// bunde.putInt("", bla);
-	//
-	// final Fragment fragment = new RemoteControlFragment();
-	// fragment.setArguments(bunde);
-	//
-	// return fragment;
-	// }
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -50,19 +40,6 @@ public class CustomRemoteControlFragment extends Fragment implements Constants,
 				.findViewById(R.id.section_button);
 		dummyButton.setTranslationX(sharedPref.getFloat(VARIABLE_BUTTONX, 0));
 		dummyButton.setTranslationY(sharedPref.getFloat(VARIABLE_BUTTONY, 0));
-//		dummyButton.setText("Dummy Button");
-		// dummyButton.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // Toast.makeText(getActivity(), "Button clicked",
-		// // Toast.LENGTH_SHORT).show();
-		// new
-		// RequestTask().execute("http://192.168.240.1/arduino/digital/13/1");
-		//
-		// }
-		// });
-
 		dummyButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -73,12 +50,10 @@ public class CustomRemoteControlFragment extends Fragment implements Constants,
 
 				if (isChecked) {
 
-					requestTask
-							.execute("1");
+					requestTask.execute("1");
 				} else {
 
-					requestTask
-							.execute("0");
+					requestTask.execute("0");
 				}
 			}
 		});
