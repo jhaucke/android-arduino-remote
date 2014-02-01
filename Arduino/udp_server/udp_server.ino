@@ -18,13 +18,15 @@ void setup() {
 void loop() {
   Bridge.get("g",gasValue,3);
   gasInt = atoi(gasValue);
+  gasInt = map(gasInt, 0, 180, 10, 170);
   gas.write(gasInt);
   Serial.println(gasInt);
   
   Bridge.get("s",steeringValue,3);
   steeringInt = atoi(steeringValue);
+  steeringInt = map(steeringInt, 0, 180, 10, 170);
   steering.write(steeringInt);
   Serial.println(steeringInt);
   
-  delay(500);
+  delay(15);
 }
