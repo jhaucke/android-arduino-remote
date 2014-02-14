@@ -17,7 +17,7 @@ import de.jere0710.arduinoremote.R;
 import de.jere0710.arduinoremote.interfaces.Constants;
 import de.jere0710.arduinoremote.listeners.DragListener;
 import de.jere0710.arduinoremote.listeners.TouchListener;
-import de.jere0710.arduinoremote.network.UdpTask;
+import de.jere0710.arduinoremote.network.TransmitterTask;
 
 public class CustomRemoteControlFragment extends Fragment implements Constants,
 		OnCheckedChangeListener {
@@ -46,7 +46,7 @@ public class CustomRemoteControlFragment extends Fragment implements Constants,
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 
-				UdpTask requestTask = new UdpTask();
+				TransmitterTask requestTask = new TransmitterTask();
 
 				if (isChecked) {
 

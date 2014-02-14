@@ -6,8 +6,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import de.jere0710.arduinoremote.R;
 import de.jere0710.arduinoremote.interfaces.Constants;
-import de.jere0710.arduinoremote.network.UdpTask;
+import de.jere0710.arduinoremote.network.TransmitterTask;
 
 public class CarRemoteControlFragment extends Fragment implements Constants,
 		SensorEventListener, OnSeekBarChangeListener {
@@ -28,6 +30,11 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	private PowerManager.WakeLock wl;
 	private final float[] mRotationMatrix = new float[16];
 	private final float[] orientationArray = new float[3];
+
+	AsyncTask<String, Integer, Boolean> transmitterTask;
+
+	private static int gasValue;
+	private static int steeringValue;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,10 +50,7 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 		seekBarGas = ((SeekBar) mContentView.findViewById(R.id.seekBarGas));
 		seekBarSteering = ((SeekBar) mContentView
 				.findViewById(R.id.seekBarSteering));
-		seekBarGas.setOnSeekBarChangeListener(this);
 		seekBarSteering.setEnabled(false);
-		seekBarSteering.setOnSeekBarChangeListener(this);
-		centeringControl();
 
 		PowerManager pm = (PowerManager) getActivity().getSystemService(
 				Context.POWER_SERVICE);
@@ -66,6 +70,15 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 		// acquire the WAKE_LOCK
 		wl.acquire();
 
+		// enable listener on seekbar
+		seekBarGas.setOnSeekBarChangeListener(this);
+		seekBarSteering.setOnSeekBarChangeListener(this);
+		centeringControl();
+
+		// start transmitter task
+		TransmitterTask requestTask = new TransmitterTask();
+		transmitterTask = requestTask.execute();
+
 		super.onResume();
 	}
 
@@ -77,6 +90,15 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 		// release the WAKE_LOCK
 		wl.release();
+
+		// disable listener on seekbar
+		seekBarGas.setOnSeekBarChangeListener(null);
+		seekBarSteering.setOnSeekBarChangeListener(null);
+		centeringControl();
+
+		// stop transmitter task
+		SystemClock.sleep(1000);
+		transmitterTask.cancel(true);
 
 		super.onPause();
 	}
@@ -119,18 +141,20 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 
-		UdpTask requestTask = new UdpTask();
+		// UdpTask requestTask = new UdpTask();
 
 		if (seekBar.getId() == R.id.seekBarGas) {
 
 			// Log.e("GAS", "gas:" + progress);
-			requestTask.execute("g:" + progress);
+			// requestTask.execute("g:" + progress);
+			gasValue = progress;
 		}
 
 		if (seekBar.getId() == R.id.seekBarSteering) {
 
 			// Log.e("STEERING", "steering:" + progress);
-			requestTask.execute("s:" + progress);
+			// requestTask.execute("s:" + progress);
+			steeringValue = progress;
 		}
 
 	}
@@ -151,7 +175,17 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	}
 
 	private void centeringControl() {
-		seekBarSteering.setProgress(80);
+
 		seekBarGas.setProgress(60);
+		gasValue = 60;
+		steeringValue = 80;
+	}
+
+	public static int getGasValue() {
+		return gasValue;
+	}
+
+	public static int getSteeringValue() {
+		return steeringValue;
 	}
 }
