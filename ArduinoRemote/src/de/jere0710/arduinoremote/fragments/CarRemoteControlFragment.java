@@ -146,9 +146,15 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 		}
 
 		if (seekBar.getId() == R.id.seekBarSteering) {
-			steeringValue = progress;
+			steeringValue = mapSteeringValue(progress);
 		}
 
+	}
+
+	private int mapSteeringValue(int progress) {
+
+		// (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+		return (progress - 0) * (0 - 180) / (180 - 0) + 180;
 	}
 
 	@Override
