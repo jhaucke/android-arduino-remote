@@ -8,7 +8,6 @@ import android.view.View.OnTouchListener;
 public class TouchListener implements OnTouchListener {
 	public boolean onTouch(View view, MotionEvent motionEvent) {
 		if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-			// ClipData data = ClipData.newPlainText("", "");
 			DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
 			view.startDrag(null, shadowBuilder, view, 0);
 			view.setVisibility(View.INVISIBLE);

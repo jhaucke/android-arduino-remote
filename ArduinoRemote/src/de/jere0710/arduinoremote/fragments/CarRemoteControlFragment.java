@@ -141,19 +141,11 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 
-		// UdpTask requestTask = new UdpTask();
-
 		if (seekBar.getId() == R.id.seekBarGas) {
-
-			// Log.e("GAS", "gas:" + progress);
-			// requestTask.execute("g:" + progress);
 			gasValue = progress;
 		}
 
 		if (seekBar.getId() == R.id.seekBarSteering) {
-
-			// Log.e("STEERING", "steering:" + progress);
-			// requestTask.execute("s:" + progress);
 			steeringValue = progress;
 		}
 
@@ -161,7 +153,6 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-
 		// nothing to do
 	}
 
@@ -169,7 +160,6 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 	public void onStopTrackingTouch(SeekBar seekBar) {
 
 		if (seekBar.getId() == R.id.seekBarGas) {
-
 			seekBarGas.setProgress(60);
 		}
 	}
