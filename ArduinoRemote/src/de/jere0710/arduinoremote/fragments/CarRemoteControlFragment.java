@@ -142,7 +142,7 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 			boolean fromUser) {
 
 		if (seekBar.getId() == R.id.seekBarGas) {
-			gasValue = progress;
+			gasValue = mapGasValue(progress);
 		}
 
 		if (seekBar.getId() == R.id.seekBarSteering) {
@@ -151,10 +151,16 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 	}
 
+	private int mapGasValue(int progress) {
+
+		// (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+		return (progress - 0) * (180 - 8) / (180 - 0) + 8;
+	}
+
 	private int mapSteeringValue(int progress) {
 
 		// (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-		return (progress - 0) * (0 - 180) / (180 - 0) + 180;
+		return (progress - 0) * (30 - 150) / (180 - 0) + 150;
 	}
 
 	@Override
@@ -174,7 +180,7 @@ public class CarRemoteControlFragment extends Fragment implements Constants,
 
 		seekBarGas.setProgress(60);
 		gasValue = 60;
-		steeringValue = 80;
+		steeringValue = 90;
 	}
 
 	public static int getGasValue() {
